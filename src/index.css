@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+.text-gradient {
+  background: linear-gradient(to bottom, #3B82F6, #10B981); /* Blue to Teal gradient */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block; /* Required for the gradient to work properly */
+}
+
+.background-colour{
+  background-image: url("../src/assets/resume2.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
