@@ -8,10 +8,7 @@ gsap.registerPlugin(SplitText);
 const Hero = () => {
   useGSAP(() => {
   
-   
-
-    // Buttons come from bottom
-    gsap.from("#hero-buttons", {
+      gsap.from("#hero-buttons", {
       y: 50,
       opacity: 0,
       duration: 1,
@@ -30,15 +27,14 @@ const Hero = () => {
         className="text-4xl md:text-6xl font-bold text-blue-500 mb-6 leading-tight max-w-4xl"
         id="title"
       >
-        Craft Resumes That <span className="text-gradient">Get Interviews</span>
+        Your Dream Job Starts with the <span className="text-gradient text-wrap">Perfect Resume</span>
       </h1>
 
       <p
-        className="text-xl text-blue-500 mb-8 max-w-2xl leading-relaxed"
+        className="text-2xl text-blue-500 mb-8 max-w-2xl leading-relaxed"
         id="subtitle"
       >
-        Create professional, recruiter-approved resumes in minutes with our
-        easy-to-use platform.
+        Stand Out. Get Noticed. Get Hired.
       </p>
 
       {/* CTA Buttons */}
@@ -47,17 +43,17 @@ const Hero = () => {
         id="hero-buttons"
       >
         <Link
-          to="/auth"
+          to="/signup"
           className="inline-block bg-gradient-to-br from-blue-500 to-teal-500 text-white font-medium text-lg px-8 py-3 rounded-lg transition-all hover:shadow-lg hover:-translate-y-1 will-change-transform text-center"
         >
           Get Started
         </Link>
-        <Link
+        {/* <Link
           to="/auth"
           className="inline-block border-2 border-blue-300 hover:border-blue-400 bg-white text-gray-700 hover:text-blue-600 font-medium text-lg px-8 py-3 rounded-lg transition-all hover:shadow-lg hover:-translate-y-1 will-change-transform text-center"
         >
           Sign In
-        </Link>
+        </Link> */}
       </div>
     </section>
   );

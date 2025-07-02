@@ -68,8 +68,8 @@ export default function Login() {
 
           <div className="bg-white rounded-lg shadow-md p-8">
             <div className="text-center mb-6">
-              <div className="flex items-center justify-center space-x-2 mb-4">
-                <img className="w-10 h-10" src={Logo} alt="Resumepire Logo" />
+              <div className="flex items-center justify-center mb-4">
+                <img className="w-10 h-10" src={Logo} alt="Resumepire Logo" aria-label="Resumpire Logo"/>
                 <span className="text-2xl font-bold text-blue-500 italic">ResumePire</span>
               </div>
               <h2 className="text-2xl font-bold text-gradient">

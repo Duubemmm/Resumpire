@@ -217,7 +217,7 @@ export default function ResumeBuilder() {
                 className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Templates
+                {/* Back to Templates */}
               </button>
               <div>
                 <h1 className="text-xl font-semibold text-gray-900">
@@ -248,7 +248,7 @@ export default function ResumeBuilder() {
                 className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" />
-                Logout
+                {/* Logout */}
               </button>
             </div>
           </div>

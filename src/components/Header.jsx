@@ -10,7 +10,7 @@ const Header = () => {
     {/* Logo & Text */}
     <div className="flex items-center justify-center sm:justify-start">
       <img src={Logo} className="w-16 h-16" />
-      <p className="text-2xl font-bold text-blue-500 italic ml-2">ResumPire</p>
+      <p className="text-2xl font-bold text-blue-500 italic">ResumPire</p>
     </div>
 
     {/* Navigation */}
@@ -25,7 +25,7 @@ const Header = () => {
         to="/SignUp"
         className="px-6 py-2 text-white bg-gradient-to-br from-blue-500 to-teal-500 rounded-full transition-all font-medium"
       >
-        Register
+        Sign Up
       </Link>
     </nav>
 
