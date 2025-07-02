@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 .text-gradient {
-  background: linear-gradient(to bottom, #3B82F6, #10B981); /* Blue to Teal gradient */
+  background: linear-gradient(to bottom, blue, teal); 
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  display: inline-block; /* Required for the gradient to work properly */
+  display: inline-block; 
 }
 
 .background-colour{

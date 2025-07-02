@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../auth/AuthContext"
 import { FileText, LogOut, Code, Briefcase, Palette, Heart, GraduationCap, TrendingUp } from "lucide-react"
+import Logo from "../assets/resumelogo.png"
 
 const templates = [
   {
@@ -115,8 +116,8 @@ export default function TemplateSelection() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
-              <FileText className="h-8 w-8 text-teal-600" />
-              <span className="text-2xl font-bold text-gray-900">Resumepire</span>
+              <img src={Logo} alt="ResumePire Logo" className="w-10 h-10" />
+              <span className="text-2xl font-bold text-blue-500 italic">ResumePire</span>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-600">Welcome, {currentUser?.displayName || currentUser?.email}!</span>
@@ -135,8 +136,8 @@ export default function TemplateSelection() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Choose Your Resume Template</h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <h1 className="text-3xl font-bold text-gradient mb-4">Choose Your Resume Template</h1>
+          <p className="text-blue-600 max-w-2xl mx-auto">
             Select a template that matches your industry and professional style. Each template is optimized for ATS
             systems and designed by industry experts.
           </p>
