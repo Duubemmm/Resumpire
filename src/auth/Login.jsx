@@ -4,6 +4,8 @@ import { useAuth } from "./AuthContext";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import ResumeImage from "../assets/resume.png";
 import Logo from "../assets/resumelogo.png";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -27,16 +29,39 @@ export default function Login() {
     try {
       setError("");
       setLoading(true);
-
+      setSuccessMessage("");
       if (showForgotPassword) {
         await resetPassword(formData.email);
-        setSuccessMessage("Password reset email sent. Please check your inbox.");
+        toast.success("Password reset email sent. Please check your inbox.", {
+          autoClose: 5000,
+        });
         setShowForgotPassword(false);
       } else {
         await login(formData.email, formData.password);
-        navigate(from, { replace: true });
+                toast.success("Login successful! Redirecting...", {
+          autoClose: 2000,
+       onClose: () => navigate(from, { replace: true })
+        });
       }
     } catch (error) {
+      let errorMessage = "An error occurred during login";
+      switch (error.code) {
+        case 'auth/user-not-found':
+          errorMessage = "No account found with this email";
+          break;
+        case 'auth/wrong-password':
+          errorMessage = "Incorrect password. Please try again";
+          break;
+                  case 'auth/invalid-email':
+          errorMessage = "Please enter a valid email address";
+          break;
+    default:
+          errorMessage = error.message;
+      }
+      toast.error(errorMessage, {
+        autoClose: 5000
+      });
+
       setError(error.message);
     }
     setLoading(false);
@@ -47,9 +72,20 @@ export default function Login() {
       setError("");
       setLoading(true);
       await loginWithGoogle();
-      navigate(from, { replace: true });
+            toast.success("Google login successful! Redirecting...", {
+        autoClose: 2000,
+      onClose:() => navigate(from, { replace: true })
+      });
     } catch (error) {
-      setError(error.message);
+            let errorMessage = "Google login failed";
+      if (error.code === 'auth/popup-closed-by-user') {
+        errorMessage = "Google sign-in was cancelled";
+      } else if (error.code === 'auth/account-exists-with-different-credential') {
+        errorMessage = "This email is already registered with another method";
+      }
+      toast.error(errorMessage, {
+        autoClose: 5000
+      });
     } finally {
       setLoading(false);
     }
@@ -57,6 +93,18 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center p-4">
+        <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="max-w-8xl bg-white rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
         
         {/* Left side - Form */}
@@ -177,7 +225,7 @@ export default function Login() {
                 
                 <button
                   onClick={handleGoogleSignIn}
-                  className="w-full flex items-center justify-center text-blue py-2 px-4 rounded-md transition-colors"
+                  className="w-full flex items-center justify-center text-blue py-2 px-4 rounded-md transition-colors shadow-2xl border border-blue-500"
                 >
                   <img
                     src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"

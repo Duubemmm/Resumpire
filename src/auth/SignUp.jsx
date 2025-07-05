@@ -4,6 +4,9 @@ import { useAuth } from "./AuthContext";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import ResumeImage from "../assets/resume.png";
 import Logo from "../assets/resumelogo.png";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -27,6 +30,7 @@ export default function Signup() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
       return setError("Passwords do not match");
     }
 
@@ -35,8 +39,17 @@ export default function Signup() {
       setLoading(true);
 
       await signup(formData.email, formData.password, formData.name);
+      toast.success("Account created successfully!");
       navigate(from, { replace: true });
     } catch (error) {
+            let errorMessage = error.message;
+      if (error.code === "auth/email-already-in-use") {
+        errorMessage = "Email already in use. Please use a different email.";
+      }
+      else if (error.code === "auth/weak-password") {
+        errorMessage = "Password is too weak. Please choose a stronger password.";
+      }
+      toast.error(errorMessage);
       setError(error.message);
     }
 
@@ -49,9 +62,17 @@ export default function Signup() {
       setLoading(true);
 
       await loginWithGoogle();
+      toast.success("Logged in successfully with Google!");
       navigate(from, { replace: true });
     } catch (error) {
-      setError(error.message);
+      let errorMessage = error.message;
+      if (error.code === "auth/popup-closed-by-user") {
+        errorMessage = "Popup closed before completing sign in.";
+      } else if (error.code === "auth/cancelled-popup-request") {
+        errorMessage = "Sign in cancelled. Please try again.";
+      }
+      toast.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -59,6 +80,19 @@ export default function Signup() {
 
   return (
     <div className="flex items-center justify-center p-4">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+
       <div className="max-w-8xl bg-white rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
         {/* Left side - Form */}
         <div className="w-full md:w-1/2 p-8">
@@ -168,7 +202,7 @@ export default function Signup() {
               <span className="px-2 bg-white text-gray-500">Or continue with</span>
             </div>
 
-            <button onClick={handleGoogleSignIn} className="w-full flex items-center justify-center text-blue py-2 px-4 rounded-md mt-4 transition-colors">
+            <button onClick={handleGoogleSignIn} className="w-full flex items-center justify-center text-blue py-2 px-4 rounded-md mt-4 transition-colors shadow-xl border border-blue-500">
               <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5 mr-2" />
               Continue with Google
             </button>

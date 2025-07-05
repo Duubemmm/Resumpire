@@ -138,7 +138,7 @@ export default function TemplateSelection() {
               </span>
               <button
                 onClick={handleLogout}
-                className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+                className="flex items-center text-gray-600 hover:text-red-600 transition-colors"
               >
                 <LogOut className="w-4 h-4 mr-2" aria-label="Log out" />
                 {/* Logout */}
