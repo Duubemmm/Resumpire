@@ -8,8 +8,8 @@ import { useAuth } from "../src/auth/AuthContext";
 import LandingPage from "../src/pages/LandingPage";
 import AuthPage from "../src/auth/Login";
 import SignUp from "../src/auth/SignUp"
-import TemplateSelection from "../src/components/TemplateSelection";
-import ResumeBuilder from "../src/components/ResumeBuilder";
+import TemplateSelection from "./pages/TemplateSelection";
+import ResumeBuilder from "./pages/ResumeBuilder";
 import "./App.css";
 
 function ProtectedRoute({ children }) {

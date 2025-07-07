@@ -68,19 +68,19 @@ const templates = [
 const getIcon = (niche) => {
   switch (niche) {
     case "Technology":
-      return <Code className="h-6 w-6" />;
+      return <Code className="h-6 w-6 text-blue-600" />;
     case "Business":
-      return <Briefcase className="h-6 w-6" />;
+      return <Briefcase className="h-6 w-6 text-blue-600" />;
     case "Design & Creative":
-      return <Palette className="h-6 w-6" />;
+      return <Palette className="h-6 w-6 text-blue-600" />;
     case "Healthcare":
-      return <Heart className="h-6 w-6" />;
+      return <Heart className="h-6 w-6 text-blue-600" />;
     case "Education":
-      return <GraduationCap className="h-6 w-6" />;
+      return <GraduationCap className="h-6 w-6 text-blue-600" />;
     case "Sales":
-      return <TrendingUp className="h-6 w-6" />;
+      return <TrendingUp className="h-6 w-6 text-blue-600" />;
     default:
-      return <FileText className="h-6 w-6" />;
+      return <FileText className="h-6 w-6 text-blue-600" />;
   }
 };
 
@@ -174,7 +174,7 @@ export default function TemplateSelection() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-2">
                     {getIcon(template.niche)}
-                    <h3 className="text-xl font-semibold">{template.name}</h3>
+                    <h3 className="text-xl font-semibold text-gradient">{template.name}</h3>
                   </div>
                   <span className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">
                     {template.niche}
