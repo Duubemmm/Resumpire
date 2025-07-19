@@ -7,16 +7,14 @@ gsap.registerPlugin(SplitText);
 
 const Hero = () => {
   useGSAP(() => {
-  
-      gsap.from("#hero-buttons", {
+    gsap.from("#hero-buttons", {
       y: 50,
       opacity: 0,
       duration: 1,
       ease: "power3.out",
       delay: 0.7,
     });
-
-  }, []); 
+  }, []);
 
   return (
     <section
@@ -27,7 +25,8 @@ const Hero = () => {
         className="text-4xl md:text-6xl font-bold text-blue-500 mb-6 leading-tight max-w-4xl"
         id="title"
       >
-        Your Dream Job Starts with the <span className="text-gradient text-wrap">Perfect Resume</span>
+        Your Dream Job Starts with the{" "}
+        <span className="text-gradient text-wrap">Perfect Resume</span>
       </h1>
 
       <p
@@ -45,15 +44,17 @@ const Hero = () => {
         <Link
           to="/signup"
           className="inline-block bg-gradient-to-br from-blue-500 to-teal-500 text-white font-medium text-lg px-8 py-3 rounded-lg transition-all hover:shadow-lg hover:-translate-y-1 will-change-transform text-center"
+          aria-label="Get Started with Resumpire"
         >
           Get Started
         </Link>
-        {/* <Link
+        <Link
           to="/auth"
           className="inline-block border-2 border-blue-300 hover:border-blue-400 bg-white text-gray-700 hover:text-blue-600 font-medium text-lg px-8 py-3 rounded-lg transition-all hover:shadow-lg hover:-translate-y-1 will-change-transform text-center"
+          aria-label="Sign In to Resumpire"
         >
           Sign In
-        </Link> */}
+        </Link>
       </div>
     </section>
   );

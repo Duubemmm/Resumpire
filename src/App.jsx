@@ -1,15 +1,16 @@
-import gsap from "gsap";
-import { ScrollTrigger, SplitText } from "gsap/all";
-gsap.registerPlugin(ScrollTrigger, SplitText);
-
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { AuthProvider } from "../src/auth/AuthContext";
 import { useAuth } from "../src/auth/AuthContext";
 import LandingPage from "../src/pages/LandingPage";
 import AuthPage from "../src/auth/Login";
-import SignUp from "../src/auth/SignUp"
+import SignUp from "../src/auth/SignUp";
 import TemplateSelection from "./pages/TemplateSelection";
-import ResumeBuilder from "./pages/ResumeBuilder";
+import ResumeRouter from "./pages/ResumeRouter";
 import "./App.css";
 
 function ProtectedRoute({ children }) {
@@ -31,10 +32,18 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/" element={currentUser ? <Navigate to="/templates" /> : <LandingPage />} />
-      <Route path="/auth" element={currentUser ? <Navigate to="/templates" /> : <AuthPage />} />
-      <Route path="/signup" element={currentUser ? <Navigate to="/templates" /> : <SignUp />} />
-
+      <Route
+        path="/"
+        element={currentUser ? <Navigate to="/templates" /> : <LandingPage />}
+      />
+      <Route
+        path="/auth"
+        element={currentUser ? <Navigate to="/templates" /> : <AuthPage />}
+      />
+      <Route
+        path="/signup"
+        element={currentUser ? <Navigate to="/templates" /> : <SignUp />}
+      />
 
       <Route
         path="/templates"
@@ -48,7 +57,7 @@ function AppRoutes() {
         path="/builder/:templateId"
         element={
           <ProtectedRoute>
-            <ResumeBuilder />
+            <ResumeRouter />
           </ProtectedRoute>
         }
       />

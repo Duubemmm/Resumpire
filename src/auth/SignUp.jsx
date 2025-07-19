@@ -18,24 +18,6 @@ const validatePassword = (password) => {
   return re.test(password);
 };
 
-const getPasswordStrength = (password) => {
-  let strength = 0;
-
-  // Length check
-  if (password.length >= 8) strength++;
-
-  // Contains uppercase
-  if (/[A-Z]/.test(password)) strength++;
-
-  // Contains lowercase
-  if (/[a-z]/.test(password)) strength++;
-
-  // Contains number
-  if (/\d/.test(password)) strength++;
-
-  return strength;
-};
-
 export default function Signup() {
   const [formData, setFormData] = useState({
     name: "",
@@ -164,52 +146,6 @@ export default function Signup() {
       setLoading(false);
     }
   };
-
-  const PasswordStrengthIndicator = ({ password }) => {
-    const strength = getPasswordStrength(password || "");
-    const strengthText = [
-      "Very Weak",
-      "Weak",
-      "Medium",
-      "Strong",
-      "Very Strong",
-    ];
-
-    return (
-      <div className="mt-1">
-        <div className="flex items-center">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div
-              key={i}
-              className={`h-1 flex-1 mx-0.5 rounded-sm ${
-                i <= strength
-                  ? i <= 2
-                    ? "bg-red-500"
-                    : i <= 3
-                    ? "bg-yellow-500"
-                    : "bg-green-500"
-                  : "bg-gray-200"
-              }`}
-            />
-          ))}
-        </div>
-        {password && (
-          <p
-            className={`text-xs mt-1 ${
-              strength <= 2
-                ? "text-red-600"
-                : strength <= 3
-                ? "text-yellow-600"
-                : "text-green-600"
-            }`}
-          >
-            {strengthText[strength - 1]}
-          </p>
-        )}
-      </div>
-    );
-  };
-
   return (
     <div className="flex items-center justify-center p-4">
       <ToastContainer
@@ -348,12 +284,7 @@ export default function Signup() {
                     )}
                   </button>
                 </div>
-                <PasswordStrengthIndicator password={formData.password} />
-                {validationErrors.password && (
-                  <p className="mt-1 text-sm text-red-600">
-                    {validationErrors.password}
-                  </p>
-                )}
+               
               </div>
 
               <div>
