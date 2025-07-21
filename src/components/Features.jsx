@@ -168,7 +168,7 @@ const Features = () => {
   return (
     <section
       ref={containerRef}
-      className="container mx-auto px-4 py-20 bg-gradient-to-tl from-teal-900/90 to-blue-700/55"
+      className="bg-gradient-to-tl from-teal-900/90 to-blue-700/55"
     >
       <div className="mb-16">
         <h2

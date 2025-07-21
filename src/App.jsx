@@ -69,8 +69,8 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="App min-h-screen background-colour">
-          <div className="max-w-7xl mx-auto py-8">
+        <div className="min-h-screen">
+          <div className=" mx-auto">
             <AppRoutes />
           </div>
         </div>

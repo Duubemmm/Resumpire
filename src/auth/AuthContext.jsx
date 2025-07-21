@@ -7,7 +7,8 @@ import {
   signInWithPopup,
   onAuthStateChanged,
   updateProfile,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  
 } from "firebase/auth";
 import { auth } from "./authService"; // Adjust the import path as necessary
 

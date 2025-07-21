@@ -5,28 +5,10 @@ import { LogOut, X, Eye, Edit3 } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Logo from "../assets/resumelogo.png";
-import img1 from "../assets/resume2.webp";
-import img2 from "../assets/resumetemplate.webp";
-import img3 from "../assets/resume1.webp";
-import img4 from "../assets/resume3.webp";
-import img5 from "../assets/resume4.webp";
+import img3 from "../assets/resume3.webp";
+import img4 from "../assets/resume4.webp";
 
 const Imagetemplates = [
-  {
-    id: 1,
-    image: img1,
-    color: "blue",
-    name: "Contemporary",
-    description: "Clean, modern design perfect for corporate professionals",
-  },
-  {
-    id: 2,
-    image: img2,
-    color: "red",
-    name: "Elegant",
-    description:
-      "Elegant template with a beautiful design and compact, easy-to-read layout that highlights your strengths and achievements.",
-  },
   {
     id: 3,
     image: img3,
@@ -42,14 +24,6 @@ const Imagetemplates = [
     name: "Creative",
     description:
       "A creative template that accents your header and makes recruiters want to read the rest. Built for any industry",
-  },
-  {
-    id: 5,
-    image: img5,
-    color: "green",
-    name: "Classic",
-    description:
-      "Traditional resume template. Fitting for conservative industries",
   },
 ];
 

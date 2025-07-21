@@ -160,9 +160,9 @@ export default function Login() {
         pauseOnHover
         theme="light"
       />
-      <div className="max-w-8xl bg-white rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
+      <div className="min-h-screen bg-white rounded-lg flex flex-col md:flex-row">
         {/* Left side - Form */}
-        <div className="w-full md:w-1/2 p-8">
+        <div className="w-full md:w-1/2 p-8 grid grow grid-cols-[1fr_min(1200px, _100%)_1fr] space-y-12">
           <Link
             to="/"
             className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4 transition-colors"
@@ -171,7 +171,7 @@ export default function Login() {
             Back to Home
           </Link>
 
-          <div className="bg-white rounded-lg shadow-md p-8">
+          <div className="bg-white rounded-lg p-8">
             <div className="text-center mb-6">
               <div className="flex items-center justify-center mb-4">
                 <img
@@ -342,12 +342,14 @@ export default function Login() {
         </div>
 
         {/* Right side - Image */}
-        <div className="w-full md:w-1/2 bg-blue-50 items-center justify-center p-8 hidden sm:flex">
+        <div className="w-full md:w-1/2 bg-blue-50 min-h-screen items-center justify-center p-8 hidden sm:flex">
+        <div className="grid grow grid-cols-[1fr_min(1200px, _100%)_1fr] space-y-12">
           <img
             src={ResumeImage}
             alt="Resume Example"
             className="w-full h-auto max-h-[32rem] object-contain rounded-lg"
           />
+          </div>
         </div>
       </div>
     </div>
