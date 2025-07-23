@@ -1,5 +1,5 @@
-
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
+import Logo from "../assets/resumelogo.png";
 import {
   Download,
   MapPin,
@@ -14,79 +14,12 @@ import {
   Github,
   Plus,
   Trash2,
-  Save,
   Upload,
   X,
   Eye,
   EyeOff,
   Palette,
 } from "lucide-react";
-
-// Custom hooks for better state management
-const useLocalStorage = (key, initialValue) => {
-  const [storedValue, setStoredValue] = useState(() => {
-    try {
-      if (typeof window !== "undefined") {
-        const item = window.localStorage.getItem(key);
-        return item ? JSON.parse(item) : initialValue;
-      }
-      return initialValue;
-    } catch (error) {
-      console.error(`Error reading localStorage key "${key}":`, error);
-      return initialValue;
-    }
-  });
-
-  const setValue = useCallback(
-    (value) => {
-      try {
-        setStoredValue(value);
-        if (typeof window !== "undefined") {
-          window.localStorage.setItem(key, JSON.stringify(value));
-        }
-      } catch (error) {
-        console.error(`Error setting localStorage key "${key}":`, error);
-      }
-    },
-    [key]
-  );
-
-  return [storedValue, setValue];
-};
-
-const useAutoSave = (data, key, delay = 2000) => {
-  const [isSaving, setIsSaving] = useState(false);
-  const [lastSaved, setLastSaved] = useState(null);
-  const timeoutRef = useRef(null);
-
-  useEffect(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    setIsSaving(true);
-    timeoutRef.current = setTimeout(() => {
-      try {
-        if (typeof window !== "undefined") {
-          localStorage.setItem(key, JSON.stringify(data));
-          setLastSaved(new Date());
-        }
-        setIsSaving(false);
-      } catch (error) {
-        console.error("Auto-save failed:", error);
-        setIsSaving(false);
-      }
-    }, delay);
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, [data, key, delay]);
-
-  return { isSaving, lastSaved };
-};
 
 // Validation utilities
 const validators = {
@@ -108,42 +41,83 @@ const validators = {
   },
 };
 
-// Theme configurations
+// Enhanced theme configurations
 const themes = {
   violet: {
-    primary: "blue-500",
-    primaryHover: "blue-600",
-    primaryLight: "blue-100",
-    accent: "blue-500",
+    name: "Violet",
+    primary: "text-violet-600",
+    primaryHover: "hover:bg-violet-700",
+    primaryLight: "bg-violet-100",
+    primaryText: "text-violet-700",
+    accent: "bg-violet-600",
+    accentHover: "hover:bg-violet-700",
+    border: "border-violet-200",
+    ring: "focus:ring-violet-500",
   },
-  purple: {
-    primary: "purple-500",
-    primaryHover: "purple-600",
-    primaryLight: "purple-100",
-    accent: "purple-500",
+  blue: {
+    name: "Blue",
+    primary: "text-blue-600",
+    primaryHover: "hover:bg-blue-700",
+    primaryLight: "bg-blue-100",
+    primaryText: "text-blue-700",
+    accent: "bg-blue-600",
+    accentHover: "hover:bg-blue-700",
+    border: "border-blue-200",
+    ring: "focus:ring-blue-500",
   },
-  green: {
-    primary: "green-500",
-    primaryHover: "green-600",
-    primaryLight: "green-100",
-    accent: "green-500",
+  emerald: {
+    name: "Emerald",
+    primary: "text-emerald-600",
+    primaryHover: "hover:bg-emerald-700",
+    primaryLight: "bg-emerald-100",
+    primaryText: "text-emerald-700",
+    accent: "bg-emerald-600",
+    accentHover: "hover:bg-emerald-700",
+    border: "border-emerald-200",
+    ring: "focus:ring-emerald-500",
+  },
+  rose: {
+    name: "Rose",
+    primary: "text-rose-600",
+    primaryHover: "hover:bg-rose-700",
+    primaryLight: "bg-rose-100",
+    primaryText: "text-rose-700",
+    accent: "bg-rose-600",
+    accentHover: "hover:bg-rose-700",
+    border: "border-rose-200",
+    ring: "focus:ring-rose-500",
+  },
+  amber: {
+    name: "Amber",
+    primary: "text-amber-600",
+    primaryHover: "hover:bg-amber-700",
+    primaryLight: "bg-amber-100",
+    primaryText: "text-amber-700",
+    accent: "bg-amber-600",
+    accentHover: "hover:bg-amber-700",
+    border: "border-amber-200",
+    ring: "focus:ring-amber-500",
   },
   indigo: {
-    primary: "indigo-500",
-    primaryHover: "indigo-600",
-    primaryLight: "indigo-100",
-    accent: "indigo-500",
+    name: "Indigo",
+    primary: "text-indigo-600",
+    primaryHover: "hover:bg-indigo-700",
+    primaryLight: "bg-indigo-100",
+    primaryText: "text-indigo-700",
+    accent: "bg-indigo-600",
+    accentHover: "hover:bg-indigo-700",
+    border: "border-indigo-200",
+    ring: "focus:ring-indigo-500",
   },
 };
 
-export default function EnhancedVioletResumeTemplate() {
+export default function ResumeTemplate() {
   // Theme state
-  const [currentTheme, setCurrentTheme] = useLocalStorage(
-    "resume-theme",
-    "violet"
-  );
+  const [currentTheme, setCurrentTheme] = useState("blue");
   const fileInputRef = useRef(null);
-  const [personalInfo, setPersonalInfo] = useLocalStorage("resume-personal", {
+
+  // Resume data state
+  const [personalInfo, setPersonalInfo] = useState({
     fullName: "VIOLET RODRIGUEZ",
     title: "Sr. Software Engineer | Full-Stack Development | Cloud Solutions",
     email: "help@enhancv.com",
@@ -156,25 +130,15 @@ export default function EnhancedVioletResumeTemplate() {
     profileImage: null,
   });
 
-  const [skills, setSkills] = useLocalStorage("resume-skills", [
-    { id: "1", name: "HTML", },
-    { id: "2", name: "CSS", },
-    { id: "3", name: "JavaScript",  },
-    { id: "4", name: "React", },
-    { id: "5", name: "TypeScript",  },
-    { id: "6", name: "Java",  },
-    { id: "7", name: "AWS S3",  },
-    { id: "8", name: "Lambda", },
-    { id: "9", name: "Docker",  },
-    { id: "10", name: "Jenkins",  },
-    { id: "11", name: "Node.js",  },
-    { id: "12", name: "Angular",  },
-    { id: "13", name: "SQL", },
-    { id: "14", name: "NoSQL",  },
-    { id: "15", name: "CloudFront", },
+  const [skills, setSkills] = useState([
+    { id: "1", name: "HTML" },
+    { id: "2", name: "CSS" },
+    { id: "3", name: "JavaScript" },
+    { id: "4", name: "React" },
+    { id: "5", name: "TypeScript" },
   ]);
 
-  const [projects, setProjects] = useLocalStorage("resume-projects", [
+  const [projects, setProjects] = useState([
     {
       id: "1",
       title: "Open Source Contribution to ChatEngine",
@@ -195,40 +159,37 @@ export default function EnhancedVioletResumeTemplate() {
     },
   ]);
 
-  const [achievements, setAchievements] = useLocalStorage(
-    "resume-achievements",
-    [
-      {
-        id: "1",
-        title: "Lead Project to Boost Engagement",
-        description:
-          "Sole responsibility for a key project that resulted in a 20% upsurge in user engagement through intuitive feature enhancements.",
-        icon: "heart",
-        date: "2023",
-        impact: "20% increase",
-      },
-      {
-        id: "2",
-        title: "Recognized for Optimizing Costs",
-        description:
-          "Drove a cloud migration initiative that cut hosting expenses by 25%, earning recognition for cost-saving measures.",
-        icon: "trending-up",
-        date: "2022",
-        impact: "25% cost reduction",
-      },
-      {
-        id: "3",
-        title: "Mentorship Excellence Award",
-        description:
-          "Awarded for dedication to mentoring junior staff, significantly boosting code quality and team performance.",
-        icon: "star",
-        date: "2023",
-        impact: "Team performance boost",
-      },
-    ]
-  );
+  const [achievements, setAchievements] = useState([
+    {
+      id: "1",
+      title: "Lead Project to Boost Engagement",
+      description:
+        "Sole responsibility for a key project that resulted in a 20% upsurge in user engagement through intuitive feature enhancements.",
+      icon: "heart",
+      date: "2023",
+      impact: "20% increase",
+    },
+    {
+      id: "2",
+      title: "Recognized for Optimizing Costs",
+      description:
+        "Drove a cloud migration initiative that cut hosting expenses by 25%, earning recognition for cost-saving measures.",
+      icon: "trending-up",
+      date: "2022",
+      impact: "25% cost reduction",
+    },
+    {
+      id: "3",
+      title: "Mentorship Excellence Award",
+      description:
+        "Awarded for dedication to mentoring junior staff, significantly boosting code quality and team performance.",
+      icon: "star",
+      date: "2023",
+      impact: "Team performance boost",
+    },
+  ]);
 
-  const [experiences, setExperiences] = useLocalStorage("resume-experiences", [
+  const [experiences, setExperiences] = useState([
     {
       id: "1",
       position: "Senior Full-Stack Developer",
@@ -237,11 +198,6 @@ export default function EnhancedVioletResumeTemplate() {
       location: "San Jose, CA",
       responsibilities: [
         "Spearheaded the development of a feature-rich analytics platform, integrating HTML5, CSS3, and React, boosting customer insights by 35%",
-        "Orchestrated a seamless migration of key applications to AWS, resulting in a 25% reduction in hosting costs and a 15% improvement in application availability",
-        "Collaborated closely with cross-functional teams to re-engineer a legacy system using Java and Spring Boot, improving system efficiency by 40%",
-        "Championed CI/CD processes using Jenkins and Docker, reducing deployment times by 50% and facilitating consistent, daily production updates",
-        "Authored comprehensive unit and functional test suites for new software modules, leading to a 30% decrease in post-deployment bugs detected",
-        "Directed and supported junior developers using modern frameworks, such as Angular and Node.js, promoting code quality and maintainability",
       ],
       isCurrentRole: true,
     },
@@ -253,10 +209,6 @@ export default function EnhancedVioletResumeTemplate() {
       location: "Mountain View, CA",
       responsibilities: [
         "Developed an e-commerce web application using React and TypeScript that handled over 10,000 transactions monthly",
-        "Enhanced user authentication and security by implementing OAuth and JWT, securing user data across platforms",
-        "Optimized SQL and NoSQL database queries, reducing load times by 20% and enhancing user experience",
-        "Actively participated in bi-weekly agile sprint planning, contributing to a 15% increase in team velocity",
-        "Mentored three junior developers in test-driven development and pair programming practices, improving team productivity by 10%",
       ],
       isCurrentRole: false,
     },
@@ -268,15 +220,12 @@ export default function EnhancedVioletResumeTemplate() {
       location: "Palo Alto, CA",
       responsibilities: [
         "Implemented new features for a cloud-based SaaS product, benefiting over 1,000 enterprise clients",
-        "Reduced application load time by 25% by re-factoring inefficient code and optimizing front-end assets",
-        "Initiated a corporate-wide code review practice, which improved code quality by 30%",
-        "Contributed to the creation of a customer support chatbot using AI technologies, enhancing customer service response times by 40%",
       ],
       isCurrentRole: false,
     },
   ]);
 
-  const [education, setEducation] = useLocalStorage("resume-education", [
+  const [education, setEducation] = useState([
     {
       id: "1",
       degree: "Master's in Computer Science",
@@ -297,50 +246,36 @@ export default function EnhancedVioletResumeTemplate() {
     },
   ]);
 
-  const [certifications, setCertifications] = useLocalStorage(
-    "resume-certifications",
-    [
-      {
-        id: "1",
-        name: "AWS Certified Solutions Architect",
-        issuer: "Amazon Web Services",
-        date: "2023",
-        expiryDate: "2026",
-        credentialId: "AWS-SA-12345",
-      },
-      {
-        id: "2",
-        name: "Google Cloud Professional Developer",
-        issuer: "Google Cloud",
-        date: "2022",
-        expiryDate: "2025",
-        credentialId: "GCP-PD-67890",
-      },
-    ]
-  );
+  const [certifications, setCertifications] = useState([
+    {
+      id: "1",
+      name: "AWS Certified Solutions Architect",
+      issuer: "Amazon Web Services",
+      date: "2023",
+      expiryDate: "2026",
+      credentialId: "AWS-SA-12345",
+    },
+    {
+      id: "2",
+      name: "Google Cloud Professional Developer",
+      issuer: "Google Cloud",
+      date: "2022",
+      expiryDate: "2025",
+      credentialId: "GCP-PD-67890",
+    },
+  ]);
 
   // UI state
   const [errors, setErrors] = useState({});
   const [previewMode, setPreviewMode] = useState(false);
   const [showThemeSelector, setShowThemeSelector] = useState(false);
 
-  // Auto-save functionality
-  const allData = {
-    personalInfo,
-    skills,
-    projects,
-    achievements,
-    experiences,
-    education,
-    certifications,
-    theme: currentTheme,
-  };
-  const { isSaving, lastSaved } = useAutoSave(allData, "resume-auto-save");
+  // Get current theme configuration
+  const theme = themes[currentTheme] || themes.blue;
 
   // Validation and error handling
   const validateField = useCallback((field, value, type = "text") => {
     let error = null;
-
     if (type === "email" && value && !validators.email(value)) {
       error = "Please enter a valid email address";
     } else if (type === "phone" && value && !validators.phone(value)) {
@@ -348,7 +283,6 @@ export default function EnhancedVioletResumeTemplate() {
     } else if (type === "url" && value && !validators.url(value)) {
       error = "Please enter a valid URL";
     }
-
     setErrors((prev) => ({ ...prev, [field]: error }));
     return !error;
   }, []);
@@ -357,12 +291,10 @@ export default function EnhancedVioletResumeTemplate() {
   const handlePersonalInfoChange = useCallback(
     (field, value) => {
       setPersonalInfo((prev) => ({ ...prev, [field]: value }));
-
       // Clear error when user starts typing
       if (errors[field]) {
         setErrors((prev) => ({ ...prev, [field]: null }));
       }
-
       // Validate specific fields
       if (field === "email") {
         validateField(field, value, "email");
@@ -388,13 +320,6 @@ export default function EnhancedVioletResumeTemplate() {
             item.id === id ? { ...item, [field]: value } : item
           )
         ),
-      reorder: (startIndex, endIndex) =>
-        setState((prev) => {
-          const result = Array.from(prev);
-          const [removed] = result.splice(startIndex, 1);
-          result.splice(endIndex, 0, removed);
-          return result;
-        }),
     }),
     []
   );
@@ -447,19 +372,58 @@ export default function EnhancedVioletResumeTemplate() {
     [setPersonalInfo]
   );
 
+  // Enhanced PDF download handler
   const handleDownloadPDF = useCallback(() => {
-    const announcement = document.createElement("div");
-    announcement.setAttribute("aria-live", "polite");
-    announcement.setAttribute("aria-atomic", "true");
-    announcement.className = "sr-only";
-    announcement.textContent = "Preparing PDF download...";
-    document.body.appendChild(announcement);
+    // Get the resume content
+    const resumeContent = document.getElementById("resume-preview").innerHTML;
 
-    setTimeout(() => {
-      window.print();
-      document.body.removeChild(announcement);
-    }, 100);
-  }, []);
+    // Create a new window for printing
+    const printWindow = window.open("", "_blank");
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Resume - ${personalInfo.fullName}</title>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <script src="https://cdn.tailwindcss.com"></script>
+          <style>
+            @media print {
+              body { 
+                margin: 0; 
+                padding: 20px; 
+                font-family: system-ui, -apple-system, sans-serif;
+              }
+              .no-print { display: none !important; }
+              * { -webkit-print-color-adjust: exact !important; }
+            }
+            body { 
+              font-family: system-ui, -apple-system, sans-serif; 
+              line-height: 1.5;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="max-w-4xl mx-auto bg-white">
+            ${resumeContent}
+          </div>
+          <script>
+            window.onload = function() {
+              setTimeout(() => {
+                window.print();
+                window.onafterprint = function() {
+                  window.close();
+                }
+              }, 500);
+            }
+          </script>
+        </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+  }, [personalInfo.fullName]);
 
   // Icon mapping
   const getIcon = useCallback((iconName) => {
@@ -470,7 +434,7 @@ export default function EnhancedVioletResumeTemplate() {
       heart: Heart,
     };
     const IconComponent = iconMap[iconName] || Star;
-    return <IconComponent className="w-4 h-4" aria-hidden="true" />;
+    return <IconComponent className="w-2 h-2" aria-hidden="true" />;
   }, []);
 
   // Keyboard event handler
@@ -480,121 +444,32 @@ export default function EnhancedVioletResumeTemplate() {
     }
   }, []);
 
-  // Export data
-  const exportData = useCallback(() => {
-    const dataStr = JSON.stringify(allData, null, 2);
-    const dataUri =
-      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
-
-    const exportFileDefaultName = "resume-data.json";
-    const linkElement = document.createElement("a");
-    linkElement.setAttribute("href", dataUri);
-    linkElement.setAttribute("download", exportFileDefaultName);
-    linkElement.click();
-  }, [allData]);
-
-  // Import data
-  const importData = useCallback(
-    (event) => {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const importedData = JSON.parse(e.target.result);
-
-          if (importedData.personalInfo)
-            setPersonalInfo(importedData.personalInfo);
-          if (importedData.skills) setSkills(importedData.skills);
-          if (importedData.projects) setProjects(importedData.projects);
-          if (importedData.achievements)
-            setAchievements(importedData.achievements);
-          if (importedData.experiences)
-            setExperiences(importedData.experiences);
-          if (importedData.education) setEducation(importedData.education);
-          if (importedData.certifications)
-            setCertifications(importedData.certifications);
-          if (importedData.theme) setCurrentTheme(importedData.theme);
-
-          // Show success message
-          const announcement = document.createElement("div");
-          announcement.setAttribute("aria-live", "polite");
-          announcement.className = "sr-only";
-          announcement.textContent = "Resume data imported successfully";
-          document.body.appendChild(announcement);
-          setTimeout(() => document.body.removeChild(announcement), 1000);
-        } catch (error) {
-          console.error("Import failed:", error);
-          setErrors((prev) => ({
-            ...prev,
-            import: "Failed to import data. Please check the file format.",
-          }));
-        }
-      };
-      reader.readAsText(file);
-    },
-    [
-      setPersonalInfo,
-      setSkills,
-      setProjects,
-      setAchievements,
-      setExperiences,
-      setEducation,
-      setCertifications,
-      setCurrentTheme,
-    ]
-  );
-
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Skip to main content link for accessibility */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50"
-      >
-        Skip to main content
-      </a>
-
+    <div className="min-h-screen bg-gray-50">
       <div className="p-2 sm:p-4 lg:p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <header className="mb-4 sm:mb-6">
+          <header className="mb-4 sm:mb-6 no-print">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
-                  Enhanced Violet Resume Template
-                </h1>
-                <p className="text-sm text-gray-600">
-                  Professional software engineer resume with advanced features
-                </p>
-                {lastSaved && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    {isSaving ? (
-                      <span className="flex items-center gap-1">
-                        <Save className="w-3 h-3 animate-spin" />
-                        Saving...
-                      </span>
-                    ) : (
-                      `Last saved: ${lastSaved.toLocaleTimeString()}`
-                    )}
-                  </p>
-                )}
+              <div className="items-center hidden sm:flex">
+               <img src={Logo} alt="ResumePire Logo" className="w-10 h-10" />
+                             <span className="text-xs font-bold text-blue-500 italic sm:text-2xl">
+                               ResumePire
+                             </span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {/* Theme selector */}
                 <div className="relative">
                   <button
                     onClick={() => setShowThemeSelector(!showThemeSelector)}
-                    className="flex items-center gap-2 bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors text-sm"
+                    className={`flex items-center gap-2 ${theme.accent} text-white px-4 py-2 rounded-lg ${theme.primaryHover} focus:outline-none focus:ring-2 ${theme.ring} focus:ring-offset-2 transition-colors text-sm`}
                   >
                     <Palette className="w-4 h-4" />
-                    Theme
+                    {theme.name}
                   </button>
-
                   {showThemeSelector && (
-                    <div className="absolute top-full right-0 mt-2 bg-white rounded-lg shadow-lg border p-2 z-10">
-                      <div className="grid grid-cols-2 gap-2">
+                    <div className="absolute top-full right-0 mt-2 bg-white rounded-lg shadow-lg border p-3 z-10 min-w-[200px]">
+                      <div className="space-y-2">
                         {Object.entries(themes).map(([key, themeConfig]) => (
                           <button
                             key={key}
@@ -602,13 +477,19 @@ export default function EnhancedVioletResumeTemplate() {
                               setCurrentTheme(key);
                               setShowThemeSelector(false);
                             }}
-                            className={`w-8 h-8 rounded-full bg-${
-                              themeConfig.primary
-                            } hover:scale-110 transition-transform ${
-                              currentTheme === key ? "ring-2 ring-gray-400" : ""
+                            className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-left hover:bg-gray-50 transition-colors ${
+                              currentTheme === key
+                                ? "bg-gray-100 ring-2 ring-gray-300"
+                                : ""
                             }`}
-                            aria-label={`Select ${key} theme`}
-                          />
+                          >
+                            <div
+                              className={`w-4 h-4 rounded-full ${themeConfig.accent}`}
+                            />
+                            <span className="text-sm font-medium">
+                              {themeConfig.name}
+                            </span>
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -618,7 +499,7 @@ export default function EnhancedVioletResumeTemplate() {
                 {/* Preview toggle */}
                 <button
                   onClick={() => setPreviewMode(!previewMode)}
-                  className="flex items-center gap-2 bg-gray-600 text-white px-3 py-2 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors text-sm"
+                  className="flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors text-sm"
                 >
                   {previewMode ? (
                     <EyeOff className="w-4 h-4" />
@@ -628,33 +509,10 @@ export default function EnhancedVioletResumeTemplate() {
                   {previewMode ? "Edit" : "Preview"}
                 </button>
 
-                {/* Export/Import */}
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={importData}
-                  className="hidden"
-                  id="import-data"
-                />
-                <label
-                  htmlFor="import-data"
-                  className="flex items-center gap-2 bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors text-sm cursor-pointer"
-                >
-                  <Upload className="w-4 h-4" />
-                  Import
-                </label>
-
-                <button
-                  onClick={exportData}
-                  className="flex items-center gap-2 bg-yellow-600 text-white px-3 py-2 rounded-lg hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-colors text-sm"
-                >
-                  <Download className="w-4 h-4" />
-                  Export
-                </button>
-
+                {/* Download PDF */}
                 <button
                   onClick={handleDownloadPDF}
-                  className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors w-full sm:w-auto"
+                  className="flex items-center justify-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors text-sm"
                   aria-label="Download resume as PDF"
                 >
                   <Download className="w-4 h-4" aria-hidden="true" />
@@ -672,10 +530,10 @@ export default function EnhancedVioletResumeTemplate() {
             >
               {/* Left Column - Form */}
               {!previewMode && (
-                <div className="space-y-4 sm:space-y-6 order-2 xl:order-1">
+                <div className="space-y-4 sm:space-y-6 order-2 xl:order-1 no-print">
                   <div className="h-[calc(100vh-200px)] overflow-y-auto pr-2 space-y-4 sm:space-y-6">
                     {/* Personal Information */}
-                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow">
+                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border">
                       <h2 className="text-lg sm:text-xl font-semibold mb-4">
                         Personal Information
                       </h2>
@@ -685,8 +543,7 @@ export default function EnhancedVioletResumeTemplate() {
                           <div className="relative">
                             <img
                               src={
-                                personalInfo.profileImage ||
-                                "/placeholder.svg?height=120&width=120&text=Profile"
+                                personalInfo.profileImage || "/placeholder.svg"
                               }
                               alt="Profile preview"
                               className="w-24 h-24 rounded-full object-cover border-4 border-gray-200 shadow-md"
@@ -752,10 +609,21 @@ export default function EnhancedVioletResumeTemplate() {
                                 e.target.value
                               )
                             }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                              theme.ring
+                            } transition-colors ${
+                              errors.fullName
+                                ? "border-red-500"
+                                : "border-gray-300"
+                            }`}
                             required
                             aria-required="true"
                           />
+                          {errors.fullName && (
+                            <p className="text-red-600 text-xs mt-1">
+                              {errors.fullName}
+                            </p>
+                          )}
                         </div>
 
                         <div>
@@ -772,10 +640,21 @@ export default function EnhancedVioletResumeTemplate() {
                             onChange={(e) =>
                               handlePersonalInfoChange("title", e.target.value)
                             }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                              theme.ring
+                            } transition-colors ${
+                              errors.title
+                                ? "border-red-500"
+                                : "border-gray-300"
+                            }`}
                             required
                             aria-required="true"
                           />
+                          {errors.title && (
+                            <p className="text-red-600 text-xs mt-1">
+                              {errors.title}
+                            </p>
+                          )}
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -796,7 +675,9 @@ export default function EnhancedVioletResumeTemplate() {
                                   e.target.value
                                 )
                               }
-                              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
+                              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                                theme.ring
+                              } transition-colors ${
                                 errors.phone
                                   ? "border-red-500"
                                   : "border-gray-300"
@@ -829,7 +710,9 @@ export default function EnhancedVioletResumeTemplate() {
                                   e.target.value
                                 )
                               }
-                              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
+                              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+                                theme.ring
+                              } transition-colors ${
                                 errors.email
                                   ? "border-red-500"
                                   : "border-gray-300"
@@ -866,7 +749,7 @@ export default function EnhancedVioletResumeTemplate() {
                                   e.target.value
                                 )
                               }
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                             />
                           </div>
                           <div>
@@ -886,7 +769,7 @@ export default function EnhancedVioletResumeTemplate() {
                                   e.target.value
                                 )
                               }
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                             />
                           </div>
                         </div>
@@ -908,7 +791,7 @@ export default function EnhancedVioletResumeTemplate() {
                                 e.target.value
                               )
                             }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                           />
                         </div>
 
@@ -930,7 +813,7 @@ export default function EnhancedVioletResumeTemplate() {
                             }
                             onKeyDown={handleKeyDown}
                             rows={4}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical"
+                            className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors resize-vertical`}
                             aria-describedby="summary-help"
                           />
                           <p
@@ -945,7 +828,7 @@ export default function EnhancedVioletResumeTemplate() {
                     </section>
 
                     {/* Skills Section */}
-                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow">
+                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border">
                       <div className="flex justify-between items-center mb-4">
                         <h2 className="text-lg sm:text-xl font-semibold">
                           Skills
@@ -954,7 +837,7 @@ export default function EnhancedVioletResumeTemplate() {
                           onClick={() =>
                             skillsHandlers.add({ name: "", category: "Other" })
                           }
-                          className="flex items-center gap-2 bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm"
+                          className={`flex items-center gap-2 ${theme.accent} text-white px-3 py-2 rounded-lg ${theme.accentHover} focus:outline-none focus:ring-2 ${theme.ring} focus:ring-offset-2 transition-colors text-sm`}
                         >
                           <Plus className="w-4 h-4" />
                           Add Skill
@@ -976,7 +859,7 @@ export default function EnhancedVioletResumeTemplate() {
                                   e.target.value
                                 )
                               }
-                              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                              className={`flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                               placeholder="Skill name"
                             />
                             {skills.length > 1 && (
@@ -994,7 +877,7 @@ export default function EnhancedVioletResumeTemplate() {
                     </section>
 
                     {/* Projects Section */}
-                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow">
+                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border">
                       <div className="flex justify-between items-center mb-4">
                         <h2 className="text-lg sm:text-xl font-semibold">
                           My Projects
@@ -1009,7 +892,7 @@ export default function EnhancedVioletResumeTemplate() {
                               status: "In Progress",
                             })
                           }
-                          className="flex items-center gap-2 bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm"
+                          className={`flex items-center gap-2 ${theme.accent} text-white px-3 py-2 rounded-lg ${theme.accentHover} focus:outline-none focus:ring-2 ${theme.ring} focus:ring-offset-2 transition-colors text-sm`}
                         >
                           <Plus className="w-4 h-4" />
                           Add Project
@@ -1053,7 +936,7 @@ export default function EnhancedVioletResumeTemplate() {
                                     e.target.value
                                   )
                                 }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                 required
                                 aria-required="true"
                               />
@@ -1077,7 +960,7 @@ export default function EnhancedVioletResumeTemplate() {
                                 }
                                 onKeyDown={handleKeyDown}
                                 rows={3}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical"
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors resize-vertical`}
                               />
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1099,7 +982,7 @@ export default function EnhancedVioletResumeTemplate() {
                                       e.target.value
                                     )
                                   }
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                 />
                               </div>
                               <div>
@@ -1119,7 +1002,7 @@ export default function EnhancedVioletResumeTemplate() {
                                       e.target.value
                                     )
                                   }
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                 >
                                   <option value="Completed">Completed</option>
                                   <option value="In Progress">
@@ -1135,7 +1018,7 @@ export default function EnhancedVioletResumeTemplate() {
                     </section>
 
                     {/* Achievements Section */}
-                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow">
+                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border">
                       <div className="flex justify-between items-center mb-4">
                         <h2 className="text-lg sm:text-xl font-semibold">
                           Key Achievements
@@ -1150,7 +1033,7 @@ export default function EnhancedVioletResumeTemplate() {
                               impact: "",
                             })
                           }
-                          className="flex items-center gap-2 bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm"
+                          className={`flex items-center gap-2 ${theme.accent} text-white px-3 py-2 rounded-lg ${theme.accentHover} focus:outline-none focus:ring-2 ${theme.ring} focus:ring-offset-2 transition-colors text-sm`}
                         >
                           <Plus className="w-4 h-4" />
                           Add Achievement
@@ -1196,7 +1079,7 @@ export default function EnhancedVioletResumeTemplate() {
                                     e.target.value
                                   )
                                 }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                 required
                                 aria-required="true"
                               />
@@ -1220,7 +1103,7 @@ export default function EnhancedVioletResumeTemplate() {
                                 }
                                 onKeyDown={handleKeyDown}
                                 rows={3}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical"
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors resize-vertical`}
                               />
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -1241,7 +1124,7 @@ export default function EnhancedVioletResumeTemplate() {
                                       e.target.value
                                     )
                                   }
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                 >
                                   <option value="star">Star</option>
                                   <option value="trending-up">
@@ -1269,7 +1152,7 @@ export default function EnhancedVioletResumeTemplate() {
                                       e.target.value
                                     )
                                   }
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                   placeholder="2023"
                                 />
                               </div>
@@ -1291,7 +1174,7 @@ export default function EnhancedVioletResumeTemplate() {
                                       e.target.value
                                     )
                                   }
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                   placeholder="20% increase"
                                 />
                               </div>
@@ -1302,7 +1185,7 @@ export default function EnhancedVioletResumeTemplate() {
                     </section>
 
                     {/* Experience Section */}
-                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow">
+                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border">
                       <div className="flex justify-between items-center mb-4">
                         <h2 className="text-lg sm:text-xl font-semibold">
                           Work Experience
@@ -1318,7 +1201,7 @@ export default function EnhancedVioletResumeTemplate() {
                               isCurrentRole: false,
                             })
                           }
-                          className="flex items-center gap-2 bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm"
+                          className={`flex items-center gap-2 ${theme.accent} text-white px-3 py-2 rounded-lg ${theme.accentHover} focus:outline-none focus:ring-2 ${theme.ring} focus:ring-offset-2 transition-colors text-sm`}
                         >
                           <Plus className="w-4 h-4" />
                           Add Experience
@@ -1364,7 +1247,7 @@ export default function EnhancedVioletResumeTemplate() {
                                     e.target.value
                                   )
                                 }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                 required
                                 aria-required="true"
                               />
@@ -1387,7 +1270,7 @@ export default function EnhancedVioletResumeTemplate() {
                                     e.target.value
                                   )
                                 }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                 required
                                 aria-required="true"
                               />
@@ -1412,7 +1295,7 @@ export default function EnhancedVioletResumeTemplate() {
                                     e.target.value
                                   )
                                 }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                 placeholder="MM/YYYY - MM/YYYY"
                               />
                             </div>
@@ -1434,7 +1317,7 @@ export default function EnhancedVioletResumeTemplate() {
                                     e.target.value
                                   )
                                 }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                               />
                             </div>
                           </div>
@@ -1450,7 +1333,7 @@ export default function EnhancedVioletResumeTemplate() {
                                   e.target.checked
                                 )
                               }
-                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                              className={`w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-2 ${theme.ring}`}
                             />
                             <label
                               htmlFor={`current-role-${exp.id}`}
@@ -1480,7 +1363,7 @@ export default function EnhancedVioletResumeTemplate() {
                               }
                               onKeyDown={handleKeyDown}
                               rows={6}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical"
+                              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors resize-vertical`}
                               placeholder="Enter each responsibility on a new line"
                               aria-describedby={`responsibilities-help-${exp.id}`}
                             />
@@ -1497,7 +1380,7 @@ export default function EnhancedVioletResumeTemplate() {
                     </section>
 
                     {/* Education Section */}
-                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow">
+                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border">
                       <div className="flex justify-between items-center mb-4">
                         <h2 className="text-lg sm:text-xl font-semibold">
                           Education
@@ -1513,7 +1396,7 @@ export default function EnhancedVioletResumeTemplate() {
                               honors: "",
                             })
                           }
-                          className="flex items-center gap-2 bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm"
+                          className={`flex items-center gap-2 ${theme.accent} text-white px-3 py-2 rounded-lg ${theme.accentHover} focus:outline-none focus:ring-2 ${theme.ring} focus:ring-offset-2 transition-colors text-sm`}
                         >
                           <Plus className="w-4 h-4" />
                           Add Education
@@ -1557,7 +1440,7 @@ export default function EnhancedVioletResumeTemplate() {
                                     e.target.value
                                   )
                                 }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                 required
                                 aria-required="true"
                               />
@@ -1580,7 +1463,7 @@ export default function EnhancedVioletResumeTemplate() {
                                     e.target.value
                                   )
                                 }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                 required
                                 aria-required="true"
                               />
@@ -1605,7 +1488,7 @@ export default function EnhancedVioletResumeTemplate() {
                                     e.target.value
                                   )
                                 }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                 placeholder="MM/YYYY - MM/YYYY"
                               />
                             </div>
@@ -1627,7 +1510,7 @@ export default function EnhancedVioletResumeTemplate() {
                                     e.target.value
                                   )
                                 }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                               />
                             </div>
                             <div>
@@ -1648,7 +1531,7 @@ export default function EnhancedVioletResumeTemplate() {
                                     e.target.value
                                   )
                                 }
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                 placeholder="3.8/4.0"
                               />
                             </div>
@@ -1671,7 +1554,7 @@ export default function EnhancedVioletResumeTemplate() {
                                   e.target.value
                                 )
                               }
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                               placeholder="Magna Cum Laude, Dean's List, etc."
                             />
                           </div>
@@ -1680,7 +1563,7 @@ export default function EnhancedVioletResumeTemplate() {
                     </section>
 
                     {/* Certifications Section */}
-                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow">
+                    <section className="bg-white p-4 sm:p-6 rounded-lg shadow-sm border">
                       <div className="flex justify-between items-center mb-4">
                         <h2 className="text-lg sm:text-xl font-semibold">
                           Certifications
@@ -1695,7 +1578,7 @@ export default function EnhancedVioletResumeTemplate() {
                               credentialId: "",
                             })
                           }
-                          className="flex items-center gap-2 bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm"
+                          className={`flex items-center gap-2 ${theme.accent} text-white px-3 py-2 rounded-lg ${theme.accentHover} focus:outline-none focus:ring-2 ${theme.ring} focus:ring-offset-2 transition-colors text-sm`}
                         >
                           <Plus className="w-4 h-4" />
                           Add Certification
@@ -1742,7 +1625,7 @@ export default function EnhancedVioletResumeTemplate() {
                                       e.target.value
                                     )
                                   }
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                   required
                                   aria-required="true"
                                 />
@@ -1765,7 +1648,7 @@ export default function EnhancedVioletResumeTemplate() {
                                       e.target.value
                                     )
                                   }
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                   required
                                   aria-required="true"
                                 />
@@ -1790,7 +1673,7 @@ export default function EnhancedVioletResumeTemplate() {
                                       e.target.value
                                     )
                                   }
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                   placeholder="MM/YYYY"
                                 />
                               </div>
@@ -1812,7 +1695,7 @@ export default function EnhancedVioletResumeTemplate() {
                                       e.target.value
                                     )
                                   }
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                   placeholder="MM/YYYY"
                                 />
                               </div>
@@ -1834,7 +1717,7 @@ export default function EnhancedVioletResumeTemplate() {
                                       e.target.value
                                     )
                                   }
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 ${theme.ring} transition-colors`}
                                   placeholder="ABC-123-XYZ"
                                 />
                               </div>
@@ -1874,13 +1757,15 @@ export default function EnhancedVioletResumeTemplate() {
                           />
                         </div>
                       )}
-                      <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 break-words">
+                      <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 break-words text-center">
                         {personalInfo.fullName}
                       </h1>
-                      <p className="text-lg text-blue-500 font-medium mb-4 break-words">
+                      <p
+                        className={`text-lg ${theme.primary} font-medium mb-4 break-words text-center`}
+                      >
                         {personalInfo.title}
                       </p>
-                      <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                      <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
                         {personalInfo.phone && (
                           <div className="flex items-center gap-1">
                             <Phone className="w-4 h-4" aria-hidden="true" />
@@ -1935,7 +1820,7 @@ export default function EnhancedVioletResumeTemplate() {
                                 .map((skill) => (
                                   <span
                                     key={skill.id}
-                                    className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full border break-words"
+                                    className={`px-3 py-1 ${theme.primaryLight} ${theme.primaryText} text-sm rounded-full border break-words`}
                                   >
                                     {skill.name}
                                   </span>
@@ -1964,10 +1849,19 @@ export default function EnhancedVioletResumeTemplate() {
                                       </p>
                                     )}
                                     {project.githubLink && (
-                                      <p className="text-sm text-gray-600 break-all">
-                                        GitHub link: {project.githubLink}
+                                      <p
+                                        className={`text-sm ${theme.primary} break-all`}
+                                      >
+                                        GitHub: {project.githubLink}
                                       </p>
                                     )}
+                                    <div className="mt-2">
+                                      <span
+                                        className={`px-2 py-1 ${theme.primaryLight} ${theme.primaryText} text-xs rounded-full`}
+                                      >
+                                        {project.status}
+                                      </span>
+                                    </div>
                                   </article>
                                 ))}
                             </div>
@@ -1992,8 +1886,10 @@ export default function EnhancedVioletResumeTemplate() {
                                     key={achievement.id}
                                     className="flex gap-3"
                                   >
-                                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                      <div className="text-blue-600">
+                                    <div
+                                      className={`flex-shrink-0 w-8 h-8 ${theme.primaryLight} rounded-full flex items-center justify-center`}
+                                    >
+                                      <div className={theme.primaryText}>
                                         {getIcon(achievement.icon)}
                                       </div>
                                     </div>
@@ -2011,7 +1907,9 @@ export default function EnhancedVioletResumeTemplate() {
                                           <span>{achievement.date}</span>
                                         )}
                                         {achievement.impact && (
-                                          <span className="text-blue-500 font-medium">
+                                          <span
+                                            className={`${theme.primaryText} font-medium`}
+                                          >
                                             {achievement.impact}
                                           </span>
                                         )}
@@ -2034,11 +1932,13 @@ export default function EnhancedVioletResumeTemplate() {
                                 .filter((cert) => cert.name.trim())
                                 .map((cert) => (
                                   <article key={cert.id}>
-                                    <h3 className="font-semibold text-gray-900 text-sm break-words">
+                                    <h3
+                                      className={`font-semibold ${theme.primary} text-sm break-words`}
+                                    >
                                       {cert.name}
                                     </h3>
                                     {cert.issuer && (
-                                      <p className="text-blue-500 text-sm break-words">
+                                      <p className="text-gray-700 text-sm break-words font-medium">
                                         {cert.issuer}
                                       </p>
                                     )}
@@ -2099,14 +1999,18 @@ export default function EnhancedVioletResumeTemplate() {
                                         <h3 className="font-semibold text-gray-900 text-base break-words">
                                           {exp.position}
                                           {exp.isCurrentRole && (
-                                            <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded-full">
+                                            <span
+                                              className={`ml-2 px-2 py-1 ${theme.primaryLight} ${theme.primaryText} text-xs rounded-full`}
+                                            >
                                               Current
                                             </span>
                                           )}
                                         </h3>
                                       )}
                                       {exp.company && (
-                                        <p className="text-blue-500 font-medium break-words">
+                                        <p
+                                          className={`${theme.primary} font-medium break-words`}
+                                        >
                                           {exp.company}
                                         </p>
                                       )}
@@ -2175,7 +2079,9 @@ export default function EnhancedVioletResumeTemplate() {
                                           </h3>
                                         )}
                                         {edu.institution && (
-                                          <p className="text-blue-500 font-medium break-words">
+                                          <p
+                                            className={`${theme.primary} font-medium break-words`}
+                                          >
                                             {edu.institution}
                                           </p>
                                         )}
@@ -2184,7 +2090,9 @@ export default function EnhancedVioletResumeTemplate() {
                                             <span>GPA: {edu.gpa}</span>
                                           )}
                                           {edu.honors && (
-                                            <span>{edu.honors}</span>
+                                            <span className="italic">
+                                              {edu.honors}
+                                            </span>
                                           )}
                                         </div>
                                       </div>
@@ -2216,15 +2124,6 @@ export default function EnhancedVioletResumeTemplate() {
                         )}
                       </div>
                     </div>
-
-                    {/* Footer */}
-                    <footer className="mt-12 pt-4 border-t border-gray-200 flex flex-col sm:flex-row sm:justify-between sm:items-center text-xs text-gray-500 gap-2">
-                      <span>www.enhancv.com</span>
-                      <div className="flex items-center gap-2">
-                        <span>Powered by</span>
-                        <span className="font-semibold">Enhancv</span>
-                      </div>
-                    </footer>
                   </div>
                 </div>
               </div>
@@ -2232,22 +2131,6 @@ export default function EnhancedVioletResumeTemplate() {
           </main>
         </div>
       </div>
-
-      {/* Error notifications */}
-      {errors.import && (
-        <div className="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50">
-          <div className="flex items-center gap-2">
-            <X className="w-4 h-4" />
-            <span>{errors.import}</span>
-            <button
-              onClick={() => setErrors((prev) => ({ ...prev, import: null }))}
-              className="ml-2 hover:bg-red-600 rounded p-1"
-            >
-              <X className="w-3 h-3" />
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Screen reader only styles */}
       <style jsx>{`
@@ -2262,7 +2145,6 @@ export default function EnhancedVioletResumeTemplate() {
           white-space: nowrap;
           border: 0;
         }
-
         .focus\\:not-sr-only:focus {
           position: static;
           width: auto;
@@ -2273,8 +2155,13 @@ export default function EnhancedVioletResumeTemplate() {
           clip: auto;
           white-space: normal;
         }
-
+        .no-print {
+          display: block;
+        }
         @media print {
+          .no-print {
+            display: none !important;
+          }
           body * {
             visibility: hidden;
           }
@@ -2288,10 +2175,6 @@ export default function EnhancedVioletResumeTemplate() {
             top: 0;
             width: 100% !important;
             box-shadow: none !important;
-          }
-
-          .order-2 {
-            display: none !important;
           }
         }
       `}</style>
