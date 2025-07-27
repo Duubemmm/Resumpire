@@ -462,7 +462,7 @@ export default function ResumeTemplate() {
                 <div className="relative">
                   <button
                     onClick={() => setShowThemeSelector(!showThemeSelector)}
-                    className={`flex items-center gap-2 ${theme.accent} text-white px-4 py-2 rounded-lg ${theme.primaryHover} focus:outline-none focus:ring-2 ${theme.ring} focus:ring-offset-2 transition-colors text-sm`}
+                    className={`flex items-center ${theme.accent} text-white px-4 py-2 rounded-lg ${theme.primaryHover} focus:outline-none focus:ring-2 ${theme.ring} focus:ring-offset-2 transition-colors text-sm`}
                   >
                     <Palette className="w-4 h-4" />
                     {theme.name}

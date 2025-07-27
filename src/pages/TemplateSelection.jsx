@@ -12,7 +12,7 @@ const Imagetemplates = [
   {
     id: 3,
     image: img3,
-    color: "purple",
+    color: "teal",
     name: "Stylish",
     description:
       "Are you a software engineer or a data scientist with a lot of skills and projects to list on your resume? This template allows you to create a perfect one-page resume",
@@ -20,7 +20,7 @@ const Imagetemplates = [
   {
     id: 4,
     image: img4,
-    color: "orange",
+    color: "blue",
     name: "Creative",
     description:
       "A creative template that accents your header and makes recruiters want to read the rest. Built for any industry",
@@ -29,12 +29,12 @@ const Imagetemplates = [
 
 const getColorClasses = (color) => {
   switch (color) {
-    case "blue":
+    case "teal":
       return {
-        card: "border-blue-200 hover:border-blue-300 bg-blue-50",
-        button: "bg-blue-600 hover:bg-blue-700 text-white",
-        preview: "bg-white text-blue-600 border border-blue-600 hover:bg-blue-50",
-        dot: "bg-blue-500",
+        card: "border-teal-200 hover:border-teal-300 bg-teal-50",
+        button: "bg-teal-600 hover:bg-teal-700 text-white",
+        preview: "bg-white text-teal-600 border border-teal-600 hover:bg-teal-50",
+        dot: "bg-teal-500",
       }
     case "gray":
       return {
@@ -43,12 +43,12 @@ const getColorClasses = (color) => {
         preview: "bg-white text-gray-600 border border-gray-600 hover:bg-gray-50",
         dot: "bg-gray-500",
       }
-    case "purple":
+    case "blue":
       return {
-        card: "border-purple-200 hover:border-purple-300 bg-purple-50",
-        button: "bg-purple-600 hover:bg-purple-700 text-white",
-        preview: "bg-white text-purple-600 border border-purple-600 hover:bg-purple-50",
-        dot: "bg-purple-500",
+        card: "border-blue-200 hover:border-blue-300 bg-blue-50",
+        button: "bg-blue-600 hover:bg-blue-700 text-white",
+        preview: "bg-white text-blue-600 border border-blue-600 hover:bg-blue-50",
+        dot: "bg-blue-500",
       }
     case "green":
       return {
@@ -56,20 +56,6 @@ const getColorClasses = (color) => {
         button: "bg-green-600 hover:bg-green-700 text-white",
         preview: "bg-white text-green-600 border border-green-600 hover:bg-green-50",
         dot: "bg-green-500",
-      }
-    case "orange":
-      return {
-        card: "border-orange-200 hover:border-orange-300 bg-orange-50",
-        button: "bg-orange-600 hover:bg-orange-700 text-white",
-        preview: "bg-white text-orange-600 border border-orange-600 hover:bg-orange-50",
-        dot: "bg-orange-500",
-      }
-    case "red":
-      return {
-        card: "border-red-200 hover:border-red-300 bg-red-50",
-        button: "bg-red-600 hover:bg-red-700 text-white",
-        preview: "bg-white text-red-600 border border-red-600 hover:bg-red-50",
-        dot: "bg-red-500",
       }
     default:
       return {
@@ -175,11 +161,6 @@ export default function TemplateSelection() {
   const handleUseTemplate = (templateId) => {
     navigate(`/builder/${templateId}`)
   }
-
-  const handlePreviewTemplate = (templateId) => {
-    navigate(`/preview/${templateId}`)
-  }
-
   return (
     <div ref={containerRef} className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       {/* Header */}
@@ -213,10 +194,10 @@ export default function TemplateSelection() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold text-gradient mb-4">
             Choose Your Resume Template
           </h1>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+          <p className="text-blue-600 max-w-2xl mx-auto text-lg">
             Select a template that matches your industry and professional style. Each template is optimized for ATS
             systems and designed by industry experts.
           </p>
@@ -326,8 +307,8 @@ export default function TemplateSelection() {
 
         {/* Additional Info Section */}
         <div className="mt-16 text-center">
-          <div className="bg-white rounded-xl shadow-sm border p-8 max-w-4xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Why Choose Our Templates?</h2>
+          <div className="bg-white rounded-xl shadow-sm border border-teal-800 p-8 max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-gradient mb-4">Why Choose Our Templates?</h2>
             <div className="grid md:grid-cols-3 gap-6 mt-8">
               <div className="text-center">
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -340,7 +321,7 @@ export default function TemplateSelection() {
                     />
                   </svg>
                 </div>
-                <h3 className="font-semibold text-gray-800 mb-2">ATS Optimized</h3>
+                <h3 className="font-semibold text-gradient mb-2">ATS Optimized</h3>
                 <p className="text-gray-600 text-sm">All templates are designed to pass Applicant Tracking Systems</p>
               </div>
               <div className="text-center">
@@ -354,7 +335,7 @@ export default function TemplateSelection() {
                     />
                   </svg>
                 </div>
-                <h3 className="font-semibold text-gray-800 mb-2">Professional Design</h3>
+                <h3 className="font-semibold text-gradient mb-2">Professional Design</h3>
                 <p className="text-gray-600 text-sm">Created by industry experts and hiring managers</p>
               </div>
               <div className="text-center">
@@ -363,7 +344,7 @@ export default function TemplateSelection() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-                <h3 className="font-semibold text-gray-800 mb-2">Easy Customization</h3>
+                <h3 className="font-semibold text-gradient mb-2">Easy Customization</h3>
                 <p className="text-gray-600 text-sm">Fully customizable colors, fonts, and layouts</p>
               </div>
             </div>
@@ -408,16 +389,6 @@ export default function TemplateSelection() {
                   className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
                 >
                   Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handlePreviewTemplate(selectedTemplate.id)}
-                  className={`px-6 py-3 rounded-lg font-medium transition-colors ${
-                    getColorClasses(selectedTemplate.color).preview
-                  }`}
-                >
-                  <Eye className="w-4 h-4 mr-2 inline" />
-                  Live Preview
                 </button>
                 <button
                   type="button"

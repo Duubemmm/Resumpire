@@ -99,7 +99,7 @@ export default function ResumeBuilder() {
   const [personalInfo, setPersonalInfo] = useState({
     fullName: "ELLEN JOHNSON",
     title: "Digital Marketing Manager | Growth Hacking | Data Analysis",
-    email: "help@enhancv.com",
+    email: "help@resumpire.com",
     phone: "+1-(234)-555-1234",
     linkedin: "linkedin.com/in/ellenjohnson",
     github: "github.com/ellenjohnson",
@@ -204,8 +204,8 @@ export default function ResumeBuilder() {
 
   const [skills, setSkills] = useState([
     { id: "1", name: "Data Analysis", category: "Technical" },
-    { id: "2", name: "Paid Acquisition", category: "Marketing"},
-    { id: "3", name: "Retargeting", category: "Marketing"},
+    { id: "2", name: "Paid Acquisition", category: "Marketing" },
+    { id: "3", name: "Retargeting", category: "Marketing" },
     { id: "4", name: "ROAS Optimization", category: "Marketing" },
     {
       id: "5",
@@ -264,7 +264,7 @@ export default function ResumeBuilder() {
   // UI State
   const [uploadError, setUploadError] = useState("");
   const [isUploading, setIsUploading] = useState(false);
-  const [theme, setTheme] = useState("green");
+  const [theme, setTheme] = useState("emerald");
   const [previewMode, setPreviewMode] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
 
@@ -590,10 +590,10 @@ export default function ResumeBuilder() {
           <header className="mb-4 sm:mb-6 no-print">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
               <div className="sm:flex items-center hidden ">
-               <img src={Logo} alt="ResumePire Logo" className="w-10 h-10" />
-                                            <span className="text-xs font-bold text-blue-500 italic sm:text-2xl">
-                                              ResumePire
-                                            </span>
+                <img src={Logo} alt="ResumePire Logo" className="w-10 h-10" />
+                <span className="text-xs font-bold text-blue-500 italic sm:text-2xl">
+                  ResumePire
+                </span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {/* Theme Selector */}
@@ -604,9 +604,9 @@ export default function ResumeBuilder() {
                     onChange={(e) => setTheme(e.target.value)}
                     className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   >
+                    <option value="emerald">Emerald</option>
                     <option value="violet">Violet</option>
                     <option value="blue">Blue</option>
-                    <option value="emerald">Emerald</option>
                     <option value="rose">Rose</option>
                     <option value="amber">Amber</option>
                     <option value="indigo">Indigo</option>
@@ -2339,7 +2339,6 @@ export default function ResumeBuilder() {
                                         className="px-2 sm:px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full border break-words flex items-center gap-1"
                                       >
                                         {skill.name}
-                                        
                                       </span>
                                     ))}
                                   </div>
@@ -2395,15 +2394,6 @@ export default function ResumeBuilder() {
                         )}
                       </div>
                     </div>
-
-                    {/* Footer */}
-                    <footer className="mt-8 sm:mt-12 pt-4 border-t border-gray-200 flex flex-col sm:flex-row sm:justify-between sm:items-center text-xs text-gray-500 gap-2">
-                      <span>www.enhancv.com</span>
-                      <div className="flex items-center gap-2">
-                        <span>Powered by</span>
-                        <span className="font-semibold">Enhancv</span>
-                      </div>
-                    </footer>
                   </div>
                 </div>
               </div>

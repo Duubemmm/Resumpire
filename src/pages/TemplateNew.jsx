@@ -312,24 +312,16 @@ export default function TemplateNew() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Skip to main content link for accessibility */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50"
-      >
-        Skip to main content
-      </a>
-
       <div className="p-2 sm:p-4 lg:p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <header className="mb-4 sm:mb-6 no-print">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+                <h1 className="text-xl sm:text-2xl font-bold text-gradient">
                   Create New Resume
                 </h1>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-blue-600">
                   Build your professional resume from scratch
                 </p>
               </div>
@@ -338,7 +330,7 @@ export default function TemplateNew() {
                 <div className="relative">
                   <button
                     onClick={() => setShowSectionManager(!showSectionManager)}
-                    className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors text-sm"
+                    className="flex items-center gap-2 bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-colors text-sm"
                   >
                     <Settings className="w-4 h-4" />
                     Manage Sections
@@ -1893,15 +1885,6 @@ export default function TemplateNew() {
                           )}
                       </div>
                     </div>
-
-                    {/* Footer */}
-                    <footer className="mt-12 pt-4 border-t border-gray-200 flex flex-col sm:flex-row sm:justify-between sm:items-center text-xs text-gray-500 gap-2">
-                      <span>www.enhancv.com</span>
-                      <div className="flex items-center gap-2">
-                        <span>Powered by</span>
-                        <span className="font-semibold">Enhancv</span>
-                      </div>
-                    </footer>
                   </div>
                 </div>
               </div>
