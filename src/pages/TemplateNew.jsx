@@ -336,7 +336,7 @@ export default function TemplateNew() {
                     Manage Sections
                   </button>
                   {showSectionManager && (
-                    <div className="absolute top-full right-0 mt-2 bg-white rounded-lg shadow-lg border p-4 z-10 min-w-[300px]">
+                    <div className="absolute mt-2 bg-white rounded-lg shadow-lg border p-4 z-10 min-w-[300px]">
                       <h3 className="font-semibold text-gray-800 mb-3">
                         Resume Sections
                       </h3>
